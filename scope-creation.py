@@ -8,7 +8,11 @@ host_token = os.environ.get('DATABRICKS_TOKEN')
 c5_access  = os.environ.get('AWS_ACCESS_KEY')
 c5_secret  = os.environ.get('AWS_SECRET_KEY')
 
+print('The host url is ', host_url)
+
 db_yml = {'databricks_host': host_url[:-1] }
+
+print('The DB host is ', db_yml['databricks_host'])
 
 def make_databricks_api_request(host_url, method, json_data='{}', headers=None, params=None):
    
