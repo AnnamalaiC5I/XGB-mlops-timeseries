@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import datasets
-from time_series_databricks.common import Task
+from xgboost_mlops.common import Task
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 import warnings
 import os
