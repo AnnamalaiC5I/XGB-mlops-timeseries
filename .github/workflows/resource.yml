@@ -1,0 +1,65 @@
+name: Terraform Pipeline
+
+on:
+  workflow_dispatch:
+  
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    
+    
+    defaults:
+      run:
+        shell: bash
+    
+    env: 
+      TF_VAR_db_host: ${{ secrets.DATABRICKS_HOST }}
+      TF_VAR_db_token: ${{ secrets.DATABRICKS_TOKEN }}
+      TF_VAR_git_token: ${{ secrets.GIT_TOKEN }}
+      TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+      TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+    
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Terraform setup
+      uses: hashicorp/setup-terraform@v1
+      
+
+    # Initialize a new or existing Terraform working directory creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+
+    # Generates an execution plan for Terra
+    - name: Terraform Plan
+      run: terraform plan
+
+      # On push to "main", build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -input=false
+
+  # trigger:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #       max-parallel: 4
+  #   needs:
+  #       - terraform
+  #   steps:
+  #       - uses: actions/checkout@v1
+          
+  #       - name: Trigger next workflow
+  #         if: success()
+  #         uses: peter-evans/repository-dispatch@v1
+  #         with:
+  #           token: ${{ secrets.GIT_TOKEN }}
+  #           repository: ${{ github.repository }}
+  #           event-type: trigger-workflow-2
+  #           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

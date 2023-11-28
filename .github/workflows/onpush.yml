@@ -1,0 +1,70 @@
+name: CI pipeline
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - '**'
+  #   tags-ignore:
+  #     - 'v*'
+
+jobs:
+  ci-pipeline:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' 
+          cache-dependency-path: setup.py
+
+      - name: Install pip
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Install dependencies and project in dev mode
+        run: |
+          pip install -e ".[local,test]"
+
+      - name: Scope Creation in Databricks
+        run: |
+          python scope-creation.py
+
+      - name: Data-preprocessing Workflow deployment (assets only upload)
+        run: |
+          dbx deploy  Data-preprocessing --assets-only
+
+      - name: Run the Data preprocessing workflow in a jobless fashion
+        run: |
+          dbx launch  Data-preprocessing --from-assets --trace
+
+      # - name: Model Training deployment (assets only upload)
+      #   run: |
+      #     dbx deploy  Model-training --assets-only
+
+      # - name: Run the Model Training workflow in a jobless fashion
+      #   run: |
+      #     dbx launch  Model-training --from-assets --trace
+
+      # - name: Webhook deployment (assets only upload)
+      #   run: |
+      #     dbx deploy  Webhook-Creation --assets-only
+
+      # - name: Run the Webhook workflow in a jobless fashion
+      #   run: |
+      #     dbx launch  Webhook-Creation --from-assets --trace
+
+

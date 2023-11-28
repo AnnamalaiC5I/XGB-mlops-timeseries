@@ -1,0 +1,28 @@
+s3:
+  bucket_name: pharma-usecase1
+  file_path: 'timeseries/historical_demand_mlops.csv'
+
+feature-store:
+  lookup_key: "Date"
+  table_name: "xgboost-timeseries"
+  online_table_name: "xgboost_online_table"
+
+
+# Mlflow:
+#     experiment_name: "/Shared/dbx/Timeseries"
+#     run_name: "sarimax"
+#     register_model: "timeseries_model"
+#     artifact_path: "timeseries_prediction"
+    
+
+# SARIMAX:
+#     order: (1,1,1)
+#     sorder: (1,1,1,12)
+
+
+# target: "Sales"
+# input: "Month"
+# shift: 1
+
+# Terraform:
+#      json: "timeseries/terraform.json"
