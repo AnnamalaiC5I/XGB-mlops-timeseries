@@ -115,7 +115,7 @@ class DataPreprocess(Task):
                 fs = feature_store.FeatureStoreClient()
                 
                 try:
-                     inference_data_df = fs.read_table('default.timeseries')
+                     inference_data_df = fs.read_table('default.xgboost-timeseries')
                      print("Feature is already present in the workspace")
 
                 except:
