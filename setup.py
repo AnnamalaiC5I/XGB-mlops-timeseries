@@ -6,7 +6,7 @@ Please follow the `entry_points` documentation for more details on how to config
 """
 
 from setuptools import find_packages, setup
-from time_series_databricks import __version__
+from xgboost_mlops import __version__
 
 PACKAGE_REQUIREMENTS = ["pyyaml"]
 
@@ -36,16 +36,16 @@ TEST_REQUIREMENTS = [
 ]
 
 setup(
-    name="time_series_databricks",
+    name="xgboost_mlops",
     packages=find_packages( exclude=["tests", "tests.*"]),
     setup_requires=["setuptools","wheel"],
     install_requires=LOCAL_REQUIREMENTS,
     extras_require={"local": LOCAL_REQUIREMENTS, "test": TEST_REQUIREMENTS},
     entry_points = {
         "console_scripts": [
-            "DataPreprocess = time_series_databricks.tasks.data_preprocess:entrypoint",
-            "ModelTrain = time_series_databricks.tasks.model_train:entrypoint",
-            "Webhook = time_series_databricks.tasks.webhook:entrypoint"
+            "DataPreprocess = xgboost_mlops.tasks.data_preprocess:entrypoint",
+            "ModelTrain = xgboost_mlops.tasks.model_train:entrypoint",
+            "Webhook = xgboost_mlops.tasks.webhook:entrypoint"
     ]
     },
     version=__version__,
