@@ -3,7 +3,7 @@ s3:
   file_path: 'timeseries/historical_demand_mlops.csv'
 
 feature-store:
-  lookup_key: "Date"
+  lookup_key: "date"
   table_name: "timeseries"
   online_table_name: "xgboost_online_table"
 
