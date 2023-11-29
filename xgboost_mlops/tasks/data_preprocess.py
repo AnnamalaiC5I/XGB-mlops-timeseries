@@ -139,11 +139,11 @@ class DataPreprocess(Task):
 
                     df_input = df_input.sort_values(by='Date',ascending=True)
 
-                    lis = list()
-                    for i in df_input['Order_Demand']:
-                            lis.append(int(i.strip('()')))
+                    # lis = list()
+                    # for i in df_input['Order_Demand']:
+                    #         lis.append(int(i.strip('()')))
                             
-                    df_input['Order_Demand'] = lis
+                    # df_input['Order_Demand'] = lis
 
                     df_input['Date']=pd.to_datetime(df_input['Date']).map(lambda x: x.strftime("%d-%m-%Y"))
 
@@ -201,8 +201,7 @@ class DataPreprocess(Task):
                     
                     fs.publish_table(table_name, online_store_spec)
 
-                   
-            
+                            
 
     def launch(self):
          
