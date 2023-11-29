@@ -126,7 +126,7 @@ class ModelTrain(Task):
 
                 orginal_test_col_df= test_df[[ 'Quarter', 'Week_Number', 'Month', 'Year', 'day','dayofyear', 'weekday', 'is_month_start', 'is_month_end','contri_week_quarter', 'SI_Quarter_week','Order_Demand']]
         
-                self.train_model(train_y, train_X, orginal_test_col_df)
+                self.train_model(train_y, train_X, test_y, test_X, orginal_test_col_df)
 
                 
  
