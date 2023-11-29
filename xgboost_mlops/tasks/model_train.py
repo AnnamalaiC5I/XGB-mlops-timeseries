@@ -96,7 +96,7 @@ class ModelTrain(Task):
 
                                
     
-    def load_data(inference_data_df):
+    def load_data(self, inference_data_df):
                     
                 training_pd = inference_data_df.toPandas()
 
@@ -122,7 +122,7 @@ class ModelTrain(Task):
 
                 inference_data_df = fs.read_table('default.timeseries')
 
-                train_X, train_y, test_X, test_y, train_df, test_df, training_set = self.load_data(inference_data_df=inference_data_df)
+                train_X, train_y, test_X, test_y, train_df, test_df, training_set = self.load_data(inference_data_df)
 
                 orginal_test_col_df= test_df[[ 'Quarter', 'Week_Number', 'Month', 'Year', 'day','dayofyear', 'weekday', 'is_month_start', 'is_month_end','contri_week_quarter', 'SI_Quarter_week','Order_Demand']]
         
