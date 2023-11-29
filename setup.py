@@ -14,6 +14,8 @@ LOCAL_REQUIREMENTS = [
     "pyspark==3.2.1",
     "boto3",
     "statsmodels",
+    "skforecast",
+    "xgboost",
     #"protobuf==3.20.1",
     "delta-spark==1.1.0",
     "scikit-learn==1.2.0",
