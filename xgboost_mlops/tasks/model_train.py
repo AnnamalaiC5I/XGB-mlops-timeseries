@@ -1,4 +1,4 @@
-from time_series_databricks.common import Task
+from xgboost_mlops.common import Task
 import statsmodels.api as sm
 import pandas as pd
 import matplotlib.pyplot as plt
