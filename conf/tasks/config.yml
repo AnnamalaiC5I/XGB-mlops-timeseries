@@ -8,21 +8,15 @@ feature-store:
   online_table_name: "xgboost_online_table"
 
 
-# Mlflow:
-#     experiment_name: "/Shared/dbx/Timeseries"
-#     run_name: "sarimax"
-#     register_model: "timeseries_model"
-#     artifact_path: "timeseries_prediction"
+Mlflow:
+    experiment_name: "/Shared/dbx/Timeseries"
+    run_name: "sarimax"
+    register_model: "timeseries_model"
+    artifact_path: "timeseries_prediction"
     
 
-# SARIMAX:
-#     order: (1,1,1)
-#     sorder: (1,1,1,12)
-
-
-# target: "Sales"
-# input: "Month"
-# shift: 1
+train_exog: ['Quarter', 'Week_Number','Month', 'Year', 'day', 'dayofyear', 'weekday',
+                'is_month_start', 'is_month_end','contri_week_quarter','SI_Quarter_week']
 
 # Terraform:
 #      json: "timeseries/terraform.json"
