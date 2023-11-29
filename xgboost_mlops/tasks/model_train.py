@@ -23,23 +23,25 @@ fs = feature_store.FeatureStoreClient()
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from xgboost import XGBRegressor
 
-def ma_forecast(orginal_test_col_df,forecaster1):
-    
-    orginal_test_col_df_ = orginal_test_col_df.copy()
-    
-    len_test = len(orginal_test_col_df)
-    
-    forecast = []
-    
-    forecast = forecaster1.predict(steps=len_test, exog = orginal_test_col_df_[train_exog])
-    
-    forecast = forecast.values
 
-    orginal_test_col_df_["Predicted_Demand"] = forecast
-
-    return orginal_test_col_df_
 
 class ModelTrain(Task):
+
+    def ma_forecast(self, orginal_test_col_df,forecaster1):
+    
+            orginal_test_col_df_ = orginal_test_col_df.copy()
+            
+            len_test = len(orginal_test_col_df)
+            
+            forecast = []
+            
+            forecast = forecaster1.predict(steps=len_test, exog = orginal_test_col_df_[self.conf['train_exog']])
+            
+            forecast = forecast.values
+
+            orginal_test_col_df_["Predicted_Demand"] = forecast
+
+            return orginal_test_col_df_
 
     def train_model(self,train_y, train_X, test_y, test_X, orginal_test_col_df):
                        
@@ -60,7 +62,7 @@ class ModelTrain(Task):
 
                                 forecaster1.fit(y=train_y, exog = train_X[train_exog])
 
-                                orginal_test_col_df_ = ma_forecast(orginal_test_col_df,forecaster1)
+                                orginal_test_col_df_ = self.ma_forecast(orginal_test_col_df,forecaster1)
 
                                 mse = mean_squared_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
                                 mae = mean_absolute_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
