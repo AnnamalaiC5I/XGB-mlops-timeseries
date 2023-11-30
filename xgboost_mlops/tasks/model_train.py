@@ -23,7 +23,35 @@ fs = feature_store.FeatureStoreClient()
 from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from xgboost import XGBRegressor
 
+#custom mlflow model
+class CustomModel(mlflow.pyfunc.PythonModel):
+    
+    def __init__(self):
+            self.forecaster = None
 
+    def load_context(self,context):
+        pass
+
+    def fit(self, train_y, train_X, train_exog):
+        forecaster1 = ForecasterAutoreg(
+        regressor = XGBRegressor(max_depth= 3, 
+                                n_estimators= 200, 
+                                learning_rate = 0.1,
+                                alpha = 0.1,
+                                random_state=123),
+        lags = 5
+        )
+
+        forecaster1.fit(y=train_y, exog = train_X[train_exog])
+
+        self.forecaster = forecaster1
+
+        
+    def predict(self,context, test_df):
+        len_test = len(test_df)
+        forecast = self.forecaster.predict(steps=len_test, exog = test_df)
+        forecast = forecast.values
+        return forecast
 
 class ModelTrain(Task):
 
@@ -49,20 +77,17 @@ class ModelTrain(Task):
                         with mlflow.start_run(run_name=self.conf['Mlflow']['run_name']) as run:
                                 
                                 client = MlflowClient()
-                                
-                                forecaster1 = ForecasterAutoreg(
-                                regressor = XGBRegressor(max_depth= 3, 
-                                                        n_estimators= 200, 
-                                                        learning_rate = 0.1,
-                                                        alpha = 0.1,
-                                                        random_state=123),
-                                lags = 5
-                                )
+
                                 train_exog = self.conf['train_exog']
+                                
+                                custom_model = CustomModel()
+                                custom_model.fit(train_y, train_X, train_exog)
 
-                                forecaster1.fit(y=train_y, exog = train_X[train_exog])
+                                context1 = None
+                                
+                                signature = infer_signature(train_X, custom_model.predict(context1,orginal_test_col_df_[train_exog]))
 
-                                orginal_test_col_df_ = self.ma_forecast(orginal_test_col_df,forecaster1)
+                                orginal_test_col_df_ = self.ma_forecast(orginal_test_col_df,custom_model.forecaster)
 
                                 mse = mean_squared_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
                                 mae = mean_absolute_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
@@ -90,12 +115,10 @@ class ModelTrain(Task):
 
                                 len_test = len(orginal_test_col_df)
 
-                                signature = infer_signature(train_X, forecaster1.predict(steps=len_test, exog= orginal_test_col_df_[train_exog]))
-
-                                mlflow.xgboost.log_model(
-                                        forecaster1, "Forecaster-reg", signature=signature
-                                )
-
+                                pyfunc_artifact_path = "xgb_model"
+                                mlflow.pyfunc.log_model(
+                                artifact_path=pyfunc_artifact_path,
+                                python_model=custom_model, registered_model_name="Xgboost_model", signature=signature)
 
 
                                
