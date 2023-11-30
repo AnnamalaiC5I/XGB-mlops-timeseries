@@ -102,7 +102,7 @@ class ModelTrain(Task):
                                 mlflow.log_param('n_estimators',self.conf['xgboost']['n_estimators'])
                                 mlflow.log_param('learning_rate',self.conf['xgboost']['learning_rate'])
                                 mlflow.log_param('alpha',self.conf['xgboost']['alpha'])
-                                mlflow.log_param('lag',self.conf['xgboost']['lag'])
+                                mlflow.log_param('lag',self.conf['xgboost']['lags'])
 
                                 fig, ax = plt.subplots(figsize=(12, 5))
                                 plt.plot(train_y, label='training')
