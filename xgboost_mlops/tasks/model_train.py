@@ -24,23 +24,25 @@ from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from xgboost import XGBRegressor
 
 #custom mlflow model
-class CustomModel(mlflow.pyfunc.PythonModel, Task):
+class CustomModel(mlflow.pyfunc.PythonModel):
     
     def __init__(self):
             self.forecaster = None
+            
 
     def load_context(self,context):
         pass
 
-    def fit(self, train_y, train_X, train_exog):
+    def fit(self, train_y, train_X, train_exog, max_depth, n_estimators, learning_rate, alpha, lags):
         forecaster1 = ForecasterAutoreg(
-        regressor = XGBRegressor(max_depth= self.conf['xgboost']['max_depth'], 
-                                n_estimators= self.conf['xgboost']['n_estimators'], 
-                                learning_rate = self.conf['xgboost']['learning_rate'],
-                                alpha = self.conf['xgboost']['alpha'],
+        regressor = XGBRegressor(max_depth= max_depth, 
+                                n_estimators= n_estimators, 
+                                learning_rate = learning_rate,
+                                alpha = alpha,
                                 random_state=123),
-        lags = self.conf['xgboost']['lags']
+        lags = lags
         )
+
 
         forecaster1.fit(y=train_y, exog = train_X[train_exog])
 
@@ -81,7 +83,7 @@ class ModelTrain(Task):
                                 train_exog = self.conf['train_exog']
                                 
                                 custom_model = CustomModel()
-                                custom_model.fit(train_y, train_X, train_exog)
+                                custom_model.fit(train_y, train_X, train_exog, self.conf['xgboost']['max_depth'], self.conf['xgboost']['n_estimators'], self.conf['xgboost']['learning_rate'],self.conf['xgboost']['alpha'], self.conf['xgboost']['lags'])
 
                                 context1 = None
                                 
@@ -96,10 +98,11 @@ class ModelTrain(Task):
                                 mlflow.log_metric('mean_squared_error',mse)
                                 mlflow.log_metric('mean_absolute_error',mae)
 
-                                mlflow.log_param('max_depth',3)
-                                mlflow.log_param('n_estimators',200)
-                                mlflow.log_param('learning_rate',0.1)
-                                mlflow.log_param('alpha',0.1)
+                                mlflow.log_param('max_depth',self.conf['xgboost']['max_depth'])
+                                mlflow.log_param('n_estimators',self.conf['xgboost']['n_estimators'])
+                                mlflow.log_param('learning_rate',self.conf['xgboost']['learning_rate'])
+                                mlflow.log_param('alpha',self.conf['xgboost']['alpha'])
+                                mlflow.log_param('lag',self.conf['xgboost']['lag'])
 
                                 fig, ax = plt.subplots(figsize=(12, 5))
                                 plt.plot(train_y, label='training')
