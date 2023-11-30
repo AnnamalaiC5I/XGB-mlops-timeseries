@@ -110,7 +110,7 @@ class ModelTrain(Task):
                                 plt.plot(orginal_test_col_df_['Predicted_Demand'], label='forecast')
                                 #x_loc = range(len(df1['date']))
                                
-                                #plt.xticks(x_loc, x_labels, rotation='vertical')
+                                
                                 plt.locator_params(axis='x', nbins=50)
                                 plt.title('Forecast vs Actuals')
                                 plt.legend(loc='upper left', fontsize=8)
