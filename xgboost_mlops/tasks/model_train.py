@@ -88,7 +88,7 @@ class ModelTrain(Task):
 
                                 mlflow.log_figure(fig,"test_vs_pred.png")
 
-                                signature = infer_signature(train_X, forecaster1.predict(train_X))
+                                signature = infer_signature(train_X, forecaster1.predict(train_X[train_exog]))
 
                                 mlflow.xgboost.log_model(
                                         forecaster1, "Forecaster-reg", signature=signature
