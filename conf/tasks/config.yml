@@ -18,5 +18,12 @@ Mlflow:
 train_exog: ['Quarter', 'Week_Number','Month', 'Year', 'day', 'dayofyear', 'weekday',
                 'is_month_start', 'is_month_end','contri_week_quarter','SI_Quarter_week']
 
+xgboost:
+      max_depth: 3
+      n_estimators: 200 
+      learning_rate: 0.1
+      alpha: 0.1
+      lags: 5
+
 # Terraform:
 #      json: "timeseries/terraform.json"

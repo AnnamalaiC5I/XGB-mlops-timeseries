@@ -24,7 +24,7 @@ from skforecast.ForecasterAutoreg import ForecasterAutoreg
 from xgboost import XGBRegressor
 
 #custom mlflow model
-class CustomModel(mlflow.pyfunc.PythonModel):
+class CustomModel(mlflow.pyfunc.PythonModel, Task):
     
     def __init__(self):
             self.forecaster = None
@@ -34,12 +34,12 @@ class CustomModel(mlflow.pyfunc.PythonModel):
 
     def fit(self, train_y, train_X, train_exog):
         forecaster1 = ForecasterAutoreg(
-        regressor = XGBRegressor(max_depth= 3, 
-                                n_estimators= 200, 
-                                learning_rate = 0.1,
-                                alpha = 0.1,
+        regressor = XGBRegressor(max_depth= self.conf['xgboost']['max_depth'], 
+                                n_estimators= self.conf['xgboost']['n_estimators'], 
+                                learning_rate = self.conf['xgboost']['learning_rate'],
+                                alpha = self.conf['xgboost']['alpha'],
                                 random_state=123),
-        lags = 5
+        lags = self.conf['xgboost']['lags']
         )
 
         forecaster1.fit(y=train_y, exog = train_X[train_exog])
