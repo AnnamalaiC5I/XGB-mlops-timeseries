@@ -85,9 +85,10 @@ class ModelTrain(Task):
 
                                 context1 = None
                                 
-                                signature = infer_signature(train_X, custom_model.predict(context1,orginal_test_col_df_[train_exog]))
-
+                        
                                 orginal_test_col_df_ = self.ma_forecast(orginal_test_col_df,custom_model.forecaster)
+
+                                signature = infer_signature(train_X, custom_model.predict(context1,orginal_test_col_df_[train_exog]))
 
                                 mse = mean_squared_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
                                 mae = mean_absolute_error(orginal_test_col_df_['Order_Demand'],orginal_test_col_df_['Predicted_Demand'])
