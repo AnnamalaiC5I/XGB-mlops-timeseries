@@ -20,7 +20,7 @@ resource "databricks_job" "this" {
         }
 
         spark_python_task {
-            python_file = "time_series_databricks/tasks/deploy.py"
+            python_file = "xgboost_mlops/tasks/deploy.py"
             source = "GIT"
         }
 
