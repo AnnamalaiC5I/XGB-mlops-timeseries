@@ -36,7 +36,7 @@ def mlflow_call_endpoint(endpoint, method, body='{}'):
 def find_staging_version(model_name):
             nw_dict = dict()
             for mv in w.model_registry.search_model_versions(filter=f"name='{model_name}'"):
-                    ##dic = dict(mv)  
+                    #dic = dict(mv)  
                     dic = mv.__dict__
                     #qwerty
                     #print(dic['run_id'])
