@@ -38,7 +38,7 @@ def find_staging_version(model_name):
             for mv in w.model_registry.search_model_versions(filter=f"name='{model_name}'"):
                     #dic = dict(mv)  
                     dic = mv.__dict__
-                    
+                    #qwerty
                     #print(dic['run_id'])
                     if dic['current_stage']=='Staging':
                             d = w.experiments.get_run(run_id=dic['run_id']).run
