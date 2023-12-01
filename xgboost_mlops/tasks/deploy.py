@@ -42,7 +42,7 @@ def find_staging_version(model_name):
                     #print(dic['run_id'])
                     if dic['current_stage']=='Staging':
                             d = w.experiments.get_run(run_id=dic['run_id']).run
-                            #print(d.data.metrics) ---------->metrics
+                            #print(d.data.metrics) ------->metrics
                             #print(dic['source'])
                             version = dic['version']
                             print(version)
