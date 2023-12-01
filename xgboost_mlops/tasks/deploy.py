@@ -19,7 +19,7 @@ w = WorkspaceClient(host=db_host,token=db_token)
 
 
 endpoint_name = 'my-model'
-model_name='timeseries_model'
+model_name='Xgboost_model'
 
 mlflow.set_tracking_uri('databricks')
 

@@ -43,28 +43,28 @@ jobs:
         run: |
           python scope-creation.py
 
-      - name: Data-preprocessing Workflow deployment (assets only upload)
-        run: |
-          dbx deploy  Data-preprocessing --assets-only
-
-      - name: Run the Data preprocessing workflow in a jobless fashion
-        run: |
-          dbx launch  Data-preprocessing --from-assets --trace
-
-      - name: Model Training deployment (assets only upload)
-        run: |
-          dbx deploy  Model-training --assets-only
-
-      - name: Run the Model Training workflow in a jobless fashion
-        run: |
-          dbx launch  Model-training --from-assets --trace
-
-      # - name: Webhook deployment (assets only upload)
+      # - name: Data-preprocessing Workflow deployment (assets only upload)
       #   run: |
-      #     dbx deploy  Webhook-Creation --assets-only
+      #     dbx deploy  Data-preprocessing --assets-only
 
-      # - name: Run the Webhook workflow in a jobless fashion
+      # - name: Run the Data preprocessing workflow in a jobless fashion
       #   run: |
-      #     dbx launch  Webhook-Creation --from-assets --trace
+      #     dbx launch  Data-preprocessing --from-assets --trace
+
+      # - name: Model Training deployment (assets only upload)
+      #   run: |
+      #     dbx deploy  Model-training --assets-only
+
+      # - name: Run the Model Training workflow in a jobless fashion
+      #   run: |
+      #     dbx launch  Model-training --from-assets --trace
+
+      - name: Webhook deployment (assets only upload)
+        run: |
+          dbx deploy  Webhook-Creation --assets-only
+
+      - name: Run the Webhook workflow in a jobless fashion
+        run: |
+          dbx launch  Webhook-Creation --from-assets --trace
 
 

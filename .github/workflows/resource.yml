@@ -46,20 +46,4 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false
 
-  # trigger:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #       max-parallel: 4
-  #   needs:
-  #       - terraform
-  #   steps:
-  #       - uses: actions/checkout@v1
-          
-  #       - name: Trigger next workflow
-  #         if: success()
-  #         uses: peter-evans/repository-dispatch@v1
-  #         with:
-  #           token: ${{ secrets.GIT_TOKEN }}
-  #           repository: ${{ github.repository }}
-  #           event-type: trigger-workflow-2
-  #           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+ 

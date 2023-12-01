@@ -25,5 +25,5 @@ xgboost:
       alpha: 0.1
       lags: 5
 
-# Terraform:
-#      json: "timeseries/terraform.json"
+Terraform:
+     json: "timeseries/terraform.json"
