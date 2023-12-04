@@ -30,6 +30,18 @@ resource "databricks_job" "this" {
                     // repo can also be specified here
                 }
         }
+        library {
+               pypi {
+                    package = "databricks-sdk"
+                    
+                }
+              }
+        library {
+               pypi {
+                    package = "databricks"
+                    
+                }
+              }
     }
 
     git_source {
