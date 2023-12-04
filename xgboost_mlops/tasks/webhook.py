@@ -5,8 +5,6 @@ import json
 # import requests
 # import zipfile
 
-# from io import BytesIO
-
 import boto3
 
 from pyspark.sql import SparkSession
