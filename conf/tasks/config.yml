@@ -4,7 +4,7 @@ s3:
 
 feature-store:
   lookup_key: "date"
-  table_name: "system.xgbtimeseries2"
+  table_name: "xgbtimeseries2.xgbtable"
   online_table_name: "xgboost_online_table"
 
 
