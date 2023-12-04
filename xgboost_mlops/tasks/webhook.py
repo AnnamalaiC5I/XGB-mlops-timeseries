@@ -48,32 +48,86 @@ class Webhook(Task):
         db_host = dbutils.secrets.get(scope="secrets-scope", key="databricks-host")
         db_token = dbutils.secrets.get(scope="secrets-scope", key="databricks-token")
 
-        s3 = boto3.resource("s3",aws_access_key_id=aws_access_key, 
-                      aws_secret_access_key=aws_secret_key, 
-                      region_name='us-west-2')
+        # s3 = boto3.resource("s3",aws_access_key_id=aws_access_key, 
+        #               aws_secret_access_key=aws_secret_key, 
+        #               region_name='us-west-2')
               
+        # bucket_name =  self.conf['s3']['bucket_name']
+        # json_key = self.conf['Terraform']['json']
+       
+        # s3_object = s3.Object(bucket_name, json_key)
+                
+        # json_content = s3_object.get()['Body'].read().decode('utf-8')
+        # json_data = json.loads(json_content)
+
+        # job_id = json_data['id']
+
+        # print(json_content)
+
+        # lists = {
+        #     "model_name":self.conf['Mlflow']['register_model'],
+        #     "events": "MODEL_VERSION_TRANSITIONED_TO_PRODUCTION"
+        # }
+        # js_list_res = mlflow_call_endpoint('registry-webhooks/list', 'GET', json.dumps(lists))
+
+        # if js_list_res:
+        #       print("Webhook is already created")
+
+        # else:
+        #         diction = {
+        #                         "job_spec": {
+        #                             "job_id": job_id,
+        #                             "access_token": db_token,
+        #                             "workspace_url": db_host
+        #                         },
+        #                         "events": [
+        #                             "MODEL_VERSION_TRANSITIONED_TO_PRODUCTION"
+        #                         ],
+        #                         "model_name": self.conf['Mlflow']['register_model'],
+        #                         "description": "Webhook for Deployment Pipeline",
+        #                         "status": "ACTIVE"
+        #                         }
+
+        #         job_json= json.dumps(diction)
+        #         js_res = mlflow_call_endpoint('registry-webhooks/create', 'POST', job_json)
+        #         print(js_res)
+
+        #         print("Webhook Created for deployment job")
+
+        except_flag=0
+        s3 = boto3.resource("s3",aws_access_key_id=aws_access_key, 
+                            aws_secret_access_key=aws_secret_key, 
+                            region_name='us-west-2')
+                    
+        # bucket_name =  'pharma-usecase1'
+        # json_key = 'timeseries/terraform.json'
         bucket_name =  self.conf['s3']['bucket_name']
         json_key = self.conf['Terraform']['json']
-       
-        s3_object = s3.Object(bucket_name, json_key)
+
+        try: 
+                s3_object = s3.Object(bucket_name, json_key)
+                        
+                json_content = s3_object.get()['Body'].read().decode('utf-8')
+                json_data = json.loads(json_content)
+
+                job_id = json_data['id']
+
+                print(json_content)
+                print('try executed')
+
+        except:
+                print("Check whether you have deployment pipeline or run resource.yml in the actions")
+                print('except executed')
+                except_flag = 1
                 
-        json_content = s3_object.get()['Body'].read().decode('utf-8')
-        json_data = json.loads(json_content)
-
-        job_id = json_data['id']
-
-        print(json_content)
-
-        lists = {
+        if except_flag != 1:
+            lists = {
             "model_name":self.conf['Mlflow']['register_model'],
             "events": "MODEL_VERSION_TRANSITIONED_TO_PRODUCTION"
-        }
-        js_list_res = mlflow_call_endpoint('registry-webhooks/list', 'GET', json.dumps(lists))
+            }
+            js_list_res = mlflow_call_endpoint('registry-webhooks/list', 'GET', json.dumps(lists))
 
-        if js_list_res:
-              print("Webhook is already created")
-
-        else:
+            if js_list_res == {}:
                 diction = {
                                 "job_spec": {
                                     "job_id": job_id,
@@ -92,7 +146,39 @@ class Webhook(Task):
                 js_res = mlflow_call_endpoint('registry-webhooks/create', 'POST', job_json)
                 print(js_res)
 
-                print("Webhook Created for deployment job")
+                print("Webhook Created for deployment job 1")
+
+            else:
+                    flag =0 
+                    for i in range(0,len(js_list_res['webhooks'])):
+                            id = js_list_res['webhooks'][i]['job_spec']['job_id']
+                            if id == job_id:
+                                flag = 1
+
+                    if flag == 1:
+                            print("webhook is already there 21")
+                            flag = 0
+
+                    else:
+                        diction = {
+                                        "job_spec": {
+                                            "job_id": job_id,
+                                            "access_token": db_token,
+                                            "workspace_url": db_host
+                                        },
+                                        "events": [
+                                            "MODEL_VERSION_TRANSITIONED_TO_PRODUCTION"
+                                        ],
+                                        "model_name": self.conf['Mlflow']['register_model'],
+                                        "description": "Webhook for Deployment Pipeline",
+                                        "status": "ACTIVE"
+                                        }
+
+                        job_json= json.dumps(diction)
+                        js_res = mlflow_call_endpoint('registry-webhooks/create', 'POST', job_json)
+                        print(js_res)
+
+                        print("Webhook Created for deployment job 22")
 
         
 

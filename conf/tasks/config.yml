@@ -9,9 +9,9 @@ feature-store:
 
 
 Mlflow:
-    experiment_name: "/Shared/dbx/Timeseries"
-    run_name: "sarimax"
-    register_model: "timeseries_model"
+    experiment_name: "/Shared/dbx/xgboost_mlops"
+    run_name: "ForecastAutoReg"
+    register_model: "Xgboost_model"
     artifact_path: "timeseries_prediction"
     
 
