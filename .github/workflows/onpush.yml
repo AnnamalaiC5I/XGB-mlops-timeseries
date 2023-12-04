@@ -43,13 +43,13 @@ jobs:
         run: |
           python scope-creation.py
 
-      - name: Data-preprocessing Workflow deployment (assets only upload)
-        run: |
-          dbx deploy  Data-preprocessing --assets-only
+      # - name: Data-preprocessing Workflow deployment (assets only upload)
+      #   run: |
+      #     dbx deploy  Data-preprocessing --assets-only
 
-      - name: Run the Data preprocessing workflow in a jobless fashion
-        run: |
-          dbx launch  Data-preprocessing --from-assets --trace
+      # - name: Run the Data preprocessing workflow in a jobless fashion
+      #   run: |
+      #     dbx launch  Data-preprocessing --from-assets --trace
 
       - name: Model Training deployment (assets only upload)
         run: |

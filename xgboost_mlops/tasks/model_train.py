@@ -151,7 +151,7 @@ class ModelTrain(Task):
 
                 dbutils = DBUtils(spark)
 
-                inference_data_df = fs.read_table('default.xgbtimeseries')
+                inference_data_df = fs.read_table('default.xgbtimeseries2')
 
                 train_X, train_y, test_X, test_y, train_df, test_df, training_set = self.load_data(inference_data_df)
 
